@@ -326,8 +326,8 @@ int main(int argc, char** argv) {
     std::cerr << "ERROR: # buckets must be in [2^11, 2^18]" << std::endl;
     valid = false;
   } else if ((ipid_method == "prngqueue" || ipid_method == "prngshuffle") &&
-             (method_arg < pow(2, 9) || method_arg > pow(2, 15))) {
-    std::cerr << "ERROR: # reserved IPIDs must be in [2^9, 2^15]" << std::endl;
+             (method_arg < pow(2, 12) || method_arg > pow(2, 15))) {
+    std::cerr << "ERROR: # reserved IPIDs must be in [2^12, 2^15]" << std::endl;
     valid = false;
   } else if (ipid_method == "perbucketshuffle" &&
              (method_arg < 2 || method_arg > 16)) {
