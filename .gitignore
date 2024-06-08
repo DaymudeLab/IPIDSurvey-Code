@@ -1,0 +1,7 @@
+# CMake build directories for benchmarking code.
+benchmark/build
+benchmark/results
+
+# Simulation code.
+__pycache__
+results
