@@ -98,4 +98,4 @@ if __name__ == "__main__":
     axin.set_xticks([1, nums_cpus[-1] // 2, nums_cpus[-1]])
     fig.legend(loc='outside right center', fontsize='x-small')
     fig.supxlabel('# Active/Contending CPUs (Log Scale)', x=0.42)
-    fig.savefig(osp.join('..', 'figs', 'benchmark.pdf'))
+    fig.savefig(osp.join('..', 'figs', 'performance.pdf'))
