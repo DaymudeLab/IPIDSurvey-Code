@@ -251,20 +251,17 @@ def plot_uniform(ax, rates, colors, num_guesses, num_samples, ticks_per_time,
     if label:
         ax.plot([], [], c=colors[2], label='Per-Conn. (Linux)')
 
-    # Per-destination has as many counters as active destinations, so we
-    # show a low (2^4), medium (2^11), and high (2^18) range.
+    # Per-destination has as many counters as active destinations; Windows sets
+    # its purge thresholds at 2^12 (Windows 10) and 2^15 (Windows Server).
     tqdm.write('\tPlotting Per-Destination...')
     prob_perdest = per_destination(rates, num_guesses)
-    ax.plot(rates * 2**4, prob_perdest, c=colors[1], alpha=0.4, zorder=2.18)
-    ax.plot(rates * 2**11, prob_perdest, c=colors[1], alpha=0.7, zorder=2.19)
-    ax.plot(rates * 2**18, prob_perdest, c=colors[1], alpha=1, zorder=2.2)
+    ax.plot(rates * 2**12, prob_perdest, c=colors[1], alpha=0.7, zorder=2.19)
+    ax.plot(rates * 2**15, prob_perdest, c=colors[1], alpha=1, zorder=2.2)
     if label:
-        ax.plot([], [], c=colors[1], alpha=0.4,
-                label=r'Per-Dest., $r = 2^{{4}}$ (Windows)')
         ax.plot([], [], c=colors[1], alpha=0.7,
-                label=r'Per-Dest., $r = 2^{{11}}$ (Windows)')
+                label=r'Per-Dest., $r = 2^{{12}}$ (Windows)')
         ax.plot([], [], c=colors[1], alpha=1,
-                label=r'Per-Dest., $r = 2^{{18}}$ (Windows)')
+                label=r'Per-Dest., $r = 2^{{15}}$ (Windows)')
 
     # Per-bucket has a fixed number of counters based on the machine RAM.
     # We show the lower (2^11) and upper (2^18) bounds.
