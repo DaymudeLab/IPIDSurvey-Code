@@ -43,7 +43,7 @@ function run_benchmark(){
 # EXPERIMENTS
 run_benchmark global
 run_benchmark perconn
-run_benchmark perdest 262144         # 2^18 maximum destinations.
+run_benchmark perdest 32768          # Windows sets a purge threshold of 2^15.
 run_benchmark perbucketl 2048        # 2^11 buckets (Linux minimum).
 run_benchmark perbucketl 262144      # 2^18 buckets (Linux maximum).
 run_benchmark perbucketm 2048        # 2^11 buckets (Linux minimum).

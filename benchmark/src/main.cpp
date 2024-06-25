@@ -236,7 +236,7 @@ void do_trials(uint32_t num_threads, std::vector<Packet>& packets) {
       PerConnIPID perconn = PerConnIPID();
       results[t] = trial(num_threads, perconn, packets);
     } else if (ipid_method == "perdest") {
-      PerDestIPID perdest = PerDestIPID(method_arg, 0.5);
+      PerDestIPID perdest = PerDestIPID(method_arg);
       results[t] = trial(num_threads, perdest, packets);
     } else if (ipid_method == "perbucketl") {
       PerBucketLIPID perbucketl = PerBucketLIPID(method_arg);
@@ -317,9 +317,8 @@ int main(int argc, char** argv) {
     valid = false;
   }
   if (ipid_method == "perdest" &&
-      (method_arg < pow(2, 11) || method_arg > pow(2, 31))) {
-    std::cerr << "ERROR: Maximum # destinations must be in [2^11, 2^31]"
-              << std::endl;
+      (method_arg != pow(2, 12) && method_arg != pow(2, 15))) {
+    std::cerr << "ERROR: Purge threshold must be in {2^12, 2^15}" << std::endl;
     valid = false;
   } else if ((ipid_method == "perbucketl" || ipid_method == "perbucketm") &&
              (method_arg < pow(2, 11) || method_arg > pow(2, 18))) {

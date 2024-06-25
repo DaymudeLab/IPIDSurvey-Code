@@ -2,11 +2,15 @@
  * See the LICENSE file for the full MIT license and copyright notice. */
 
 // PerDestIPID represents per-destination IPID selection. In Windows, this is
-// simply a hash table of IPID counters keyed by source/destination IP address
-// pairs. When the table reaches a maximum size, a purge sequence is initiated
-// that deletes any "stale" entries to free up space. In our case, we are
-// accessing all counters so fast that the typical version of "staleness" is
-// irrelevant; instead, we delete entries randomly in our purge sequences.
+// a hash table ("PathSet") of (IPID counter, last access timestamp) pairs keyed
+// by source/destination IP address pairs. Every 0.5 seconds, the PathSet's size
+// is checked. If the size exceeds its "purge threshold" or >= 5000 entries were
+// added since the last check, a purge sequence is initiated that deletes up to
+// max(1000, # entries added since last check) "stale" entries to free up space.
+// There are two cases for what's considered "stale": if the PathSet's size is
+// 1-2x its purge threshold, then entries accessed longer than 60 s ago are
+// considered stale; if the PathSet's size exceeds 2x its purge threshold, all
+// entries are considered stale.
 
 #ifndef BENCHMARK_PERDESTIPID_H_
 #define BENCHMARK_PERDESTIPID_H_
@@ -14,37 +18,38 @@
 #include <mutex>
 #include <random>
 #include <unordered_map>
+#include <utility>
 
 #include "ipidmethod.h"
 
 class PerDestIPID : IPIDMethod {
  public:
-  // Constructs a PerDestIPID, initializing the hash table's maximum size and
-  // entry purge probability.
-  PerDestIPID(uint32_t max_dests, float purge_prob);
+  // Constructs a PerDestIPID, initializing the hash table's purge threshold.
+  PerDestIPID(uint32_t purge_threshold);
 
-  // Obtain the next IPID by hashing the connection tuple and incrementing the
-  // CPU counter.
+  // Obtain the next IPID by initializing or incrementing the corresponding
+  // destination counter and initiating a purge sequence if it is time.
   uint16_t get_ipid(Packet& pkt) override;
 
  protected:
-  // Maximum capacity of destinations before a purge sequence is triggered.
-  const uint32_t _kMaxDests;
-
-  // Probability of deleting any one particular entry during a purge sequence.
-  const float _kPurgeProb;
+  // Threshold of destination counters over which a purge sequence is triggered.
+  const uint32_t _kPurgeThreshold;
 
   // Random number generator and distributions.
   std::mt19937 _rng_mt;
-  std::uniform_real_distribution<float> _purge_dist;
   std::uniform_int_distribution<uint16_t> _ipid_dist;
 
   // Lock for the hash table.
   std::mutex _lock;
 
-  // Hash table mapping source/destination IP address pairs (concatenated as
-  // one 64-bit integer) to IPID counters.
-  std::unordered_map<uint64_t, uint16_t> _htable;
+  // Hash table ("PathSet") mapping src/dst IP address pairs (concatenated as
+  // one 64-bit integer) to (IPID counter, last access timestamp) pairs.
+  std::unordered_map<uint64_t, std::pair<uint16_t,
+      std::chrono::time_point<std::chrono::steady_clock>>> _pathset;
+
+  // Timestamp of last purge check and number of entries added since last check.
+  std::chrono::time_point<std::chrono::steady_clock> _tpurge;
+  uint32_t _num_added_since_check;
 };
 
 #endif  // BENCHMARK_PERDESTIPID_H_
