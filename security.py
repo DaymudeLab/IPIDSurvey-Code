@@ -255,39 +255,38 @@ def plot_uniform(ax, rates, colors, num_guesses, num_samples, ticks_per_time,
     # its purge thresholds at 2^12 (Windows 10) and 2^15 (Windows Server).
     tqdm.write('\tPlotting Per-Destination...')
     prob_perdest = per_destination(rates, num_guesses)
-    ax.plot(rates * 2**12, prob_perdest, c=colors[1], alpha=0.7, zorder=2.19)
-    ax.plot(rates * 2**15, prob_perdest, c=colors[1], alpha=1, zorder=2.2)
+    ax.plot(rates * 2**15, prob_perdest, c=colors[1], zorder=2.2)
+    ax.plot(rates * 2**12, prob_perdest, c=colors[1], linestyle='--', zorder=2.19)
     if label:
-        ax.plot([], [], c=colors[1], alpha=0.7,
-                label=r'Per-Dest., $r = 2^{{12}}$ (Windows)')
-        ax.plot([], [], c=colors[1], alpha=1,
+        ax.plot([], [], c=colors[1],
                 label=r'Per-Dest., $r = 2^{{15}}$ (Windows)')
+        ax.plot([], [], c=colors[1], linestyle='--',
+                label=r'Per-Dest., $r = 2^{{12}}$ (Windows)')
 
     # Per-bucket has a fixed number of counters based on the machine RAM.
     # We show the lower (2^11) and upper (2^18) bounds.
     tqdm.write('\tPlotting Per-Bucket...')
     prob_perbucket = per_bucket(rates, num_guesses, num_samples,
                                 ticks_per_time, seed, num_cores)
-    ax.plot(rates * 2**11, prob_perbucket, c=colors[3], alpha=0.7, zorder=2.09)
-    ax.plot(rates * 2**18, prob_perbucket, c=colors[3], alpha=1, zorder=2.1)
+    ax.plot(rates * 2**18, prob_perbucket, c=colors[3], zorder=2.1)
+    ax.plot(rates * 2**11, prob_perbucket, c=colors[3], linestyle='--', zorder=2.09)
     if label:
-        ax.plot([], [], c=colors[3], alpha=0.7,
-                label=r'Per-Bucket, $r = 2^{{11}}$ (Linux)')
-        ax.plot([], [], c=colors[3], alpha=1,
+        ax.plot([], [], c=colors[3],
                 label=r'Per-Bucket, $r = 2^{{18}}$ (Linux)')
+        ax.plot([], [], c=colors[3], linestyle='--',
+                label=r'Per-Bucket, $r = 2^{{11}}$ (Linux)')
 
     # PRNG methods have only one resource, so lambda_i = lambda.
     tqdm.write('\tPlotting PRNGs...')
-    ax.plot(rates, prng(rates, num_guesses, 4096), c=colors[4], alpha=0.4)
-    ax.plot(rates, prng(rates, num_guesses, 8192), c=colors[4], alpha=0.7)
-    ax.plot(rates, prng(rates, num_guesses, 32768), c=colors[4], alpha=1)
+    ax.plot(rates, prng(rates, num_guesses, 32768), c=colors[4])
+    ax.plot(rates, prng(rates, num_guesses, 8192), c=colors[4], linestyle='--')
+    ax.plot(rates, prng(rates, num_guesses, 0), c=colors[4], linestyle=':')
     if label:
-        ax.plot([], [], c=colors[4], alpha=0.4,
-                label=r'PRNG, $k = 2^{{12}}$ (macOS)')
-        ax.plot([], [], c=colors[4], alpha=0.7,
+        ax.plot([], [], c=colors[4], label=r'PRNG, $k = 2^{{15}}$ (OpenBSD)')
+        ax.plot([], [], c=colors[4], linestyle='--',
                 label=r'PRNG, $k = 2^{{13}}$ (FreeBSD)')
-        ax.plot([], [], c=colors[4], alpha=1,
-                label=r'PRNG, $k = 2^{{15}}$ (OpenBSD)')
+        ax.plot([], [], c=colors[4], linestyle=':',
+                label=r'PRNG, $k = 2^{{0}}$ (macOS)')
 
 
 def plot_worst(ax, rates, colors, num_guesses, num_samples, ticks_per_time,
@@ -337,9 +336,9 @@ def plot_worst(ax, rates, colors, num_guesses, num_samples, ticks_per_time,
 
     # PRNG methods have only one resource, so lambda_i = lambda.
     tqdm.write('\tPlotting PRNGs...')
-    ax.plot(rates, prng(rates, num_guesses, 4096), c=colors[4], alpha=0.4)
-    ax.plot(rates, prng(rates, num_guesses, 8192), c=colors[4], alpha=0.7)
-    ax.plot(rates, prng(rates, num_guesses, 32768), c=colors[4], alpha=1)
+    ax.plot(rates, prng(rates, num_guesses, 32768), c=colors[4])
+    ax.plot(rates, prng(rates, num_guesses, 8192), c=colors[4], linestyle='--')
+    ax.plot(rates, prng(rates, num_guesses, 0), c=colors[4], linestyle=':')
 
 
 def plot_security(num_samples=20*MAX_IDS, ticks_per_time=3, seed=1234567,
@@ -367,15 +366,15 @@ def plot_security(num_samples=20*MAX_IDS, ticks_per_time=3, seed=1234567,
                  seed, num_cores, label=True)
     plot_worst(main_axes[1], rates, colors, 1, num_samples, ticks_per_time,
                seed, num_cores)
-    main_fig.supxlabel('$\lambda$, Poisson Rate of Packet Transmission (Log Scale)', x=0.45)
+    main_fig.supxlabel(r'$\lambda$, Poisson Rate of Packet Transmission (Log Scale)', x=0.45)
     main_fig.supylabel('Probability of Adversarial Guess (Log Scale)')
     main_fig.legend(loc='outside right center', fontsize='x-small')
-    main_axes[0].set(title='Uniform Traffic ($\lambda_i = \lambda / r$)',
+    main_axes[0].set(title=r'Uniform Traffic ($\lambda_i = \lambda / r$)',
                      xlim=[2**-10, 2**26], yscale='log',
                      yticks=np.logspace(-5, 0, num=6))
     main_axes[0].set_xscale('log', base=2)
     main_axes[0].set_xticks([2.**i for i in np.arange(-8, 25, 4)])
-    main_axes[1].set(title='Worst-Case Traffic ($\lambda_i = $argmax Pr[adv. guess])',
+    main_axes[1].set(title=r'Worst-Case Traffic ($\lambda_i = $argmax Pr[adv. guess])',
                      xlim=[2**-18, 2**18])
     main_axes[1].set_xscale('log', base=2)
     main_axes[1].set_xticks([2.**i for i in np.arange(-16, 17, 4)])
@@ -391,16 +390,16 @@ def plot_security(num_samples=20*MAX_IDS, ticks_per_time=3, seed=1234567,
         plot_worst(apdx_axes[1, i], rates, colors, num_guesses, num_samples,
                    ticks_per_time, seed, num_cores)
         apdx_axes[0, i].set(title=f"$g = ${num_guesses}")
-    apdx_fig.supxlabel('$\lambda$, Poisson Rate of Packet Transmission (Log Scale)', x=0.45)
+    apdx_fig.supxlabel(r'$\lambda$, Poisson Rate of Packet Transmission (Log Scale)', x=0.45)
     apdx_fig.supylabel('Probability of Adversarial Guess (Log Scale)')
     apdx_fig.legend(loc='outside right center', fontsize='x-small')
     apdx_axes[0, 0].set(xlim=[2**-10, 2**26],\
-                        ylabel='Uniform Traffic ($\lambda_i = \lambda / r$)',
+                        ylabel=r'Uniform Traffic ($\lambda_i = \lambda / r$)',
                         yscale='log', yticks=np.logspace(-5, 0, num=6))
     apdx_axes[0, 0].set_xscale('log', base=2)
     apdx_axes[0, 0].set_xticks([2.**i for i in np.arange(-8, 25, 8)])
     apdx_axes[1, 0].set(xlim=[2**-18, 2**18],
-                        ylabel='Worst-Case Traffic ($\lambda_i = $argmax Pr[adv. guess])')
+                        ylabel=r'Worst-Case Traffic ($\lambda_i = $argmax Pr[adv. guess])')
     apdx_axes[1, 0].set_xscale('log', base=2)
     apdx_axes[1, 0].set_xticks([2.**i for i in np.arange(-16, 17, 8)])
     apdx_fig.savefig(osp.join('..', 'figs', 'security_appendix.pdf'))

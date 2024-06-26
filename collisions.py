@@ -202,28 +202,23 @@ def plot_collisions(num_trials=100000, ticks_per_time=3, seed=1234567,
             c=colors[3], linestyle=(21, (7, 21)), zorder=2.1)
     ax.plot([], [], c=colors[3], label='Per-Bucket (Linux)')
 
-    tqdm.write('Plotting PRNG with k = 4096...')
-    ax.plot(rates, prng(rates, 4096), c=colors[4], alpha=0.4,
-            label=r'PRNG, $k = 2^{{12}}$ (macOS)')
-    tqdm.write('Plotting PRNG with k = 8192...')
-    ax.plot(rates, prng(rates, 8192), c=colors[4], alpha=0.7,
-            label=r'PRNG, $k = 2^{{13}}$ (FreeBSD)')
     tqdm.write('Plotting PRNG with k = 32768...')
-    ax.plot(rates, prng(rates, 32768), c=colors[4], alpha=1,
+    ax.plot(rates, prng(rates, 32768), c=colors[4], zorder=2.05,
             label=r'PRNG, $k = 2^{{15}}$ (OpenBSD)')
+    tqdm.write('Plotting PRNG with k = 8192...')
+    ax.plot(rates, prng(rates, 8192), c=colors[4], linestyle='--', zorder=2.04,
+            label=r'PRNG, $k = 2^{{13}}$ (FreeBSD)')
+    tqdm.write('Plotting PRNG with k = 0...')
+    ax.plot(rates, prng(rates, 0), c=colors[4], linestyle=':', zorder=2.03,
+            label=r'PRNG, $k = 0$ (macOS)')
 
     # Set titles, scales, and legend.
     ax.set(xlabel=r'$\lambda$, Poisson Rate of Packet Transmission (Log Scale)',
            ylabel='Worst-Case Probability of Collision (Log Scale)',
-           yscale='log', yticks=np.logspace(-280, 0, num=8), ylim=[1e-300,None],
-           xlim=[2**8, 2**18])
+           yscale='log', yticks=np.logspace(-6, 0, num=7), ylim=[5e-7, 2],
+           xlim=[2**0, 2**18])
     ax.set_xscale('log', base=2)
-    ax.set_xticks([2.**i for i in np.arange(8, 19, 2)])
-    ax.set_xticklabels([r'$2^0$', r'$2^{{10}}$', r'$2^{{12}}$', r'$2^{{14}}$',
-                        r'$2^{{16}}$', r'$2^{{18}}$'])
-    breakargs = dict(marker=[(-1, -.7), (1, .7)], markersize=12, color='w',
-                     mec='k', mew=1, clip_on=False)
-    ax.plot([0.09, 0.11], [0, 0], transform=ax.transAxes, **breakargs)
+    ax.set_xticks([2.**i for i in np.arange(0, 19, 2)])
     ax.legend(loc='upper left', fontsize='x-small')
     fig.savefig(osp.join('..', 'figs', 'collisions.pdf'))
 
