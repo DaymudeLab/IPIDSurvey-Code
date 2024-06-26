@@ -12,7 +12,7 @@ PRNGQueueIPID::PRNGQueueIPID(uint32_t queue_size)
       _queue(std::vector<uint16_t>(queue_size, 0)),
       _lookup(std::vector<bool>(65536, 0)) {}
 
-uint16_t PRNGQueueIPID::get_ipid(Packet& pkt) {
+uint16_t PRNGQueueIPID::get_ipid(Packet& pkt, uint32_t thread_id) {
   // Obtain exclusive access.
   _lock.lock();
 

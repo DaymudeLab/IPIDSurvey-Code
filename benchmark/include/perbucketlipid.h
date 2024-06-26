@@ -30,7 +30,7 @@ class PerBucketLIPID : IPIDMethod {
   // source/destination IP addresses, protocol number, and secret keys and then
   // incrementing that bucket counter by a value chosen uniformly at random from
   // 1 to the number of elapsed system ticks (milliseconds) since last access.
-  uint16_t get_ipid(Packet& pkt) override;
+  uint16_t get_ipid(Packet& pkt, uint32_t thread_id) override;
 
  protected:
   // The fixed number of buckets.

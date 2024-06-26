@@ -27,7 +27,7 @@ class PerBucketShuffleIPID : IPIDMethod {
   // source/destination IP addresses, protocol number, and secret keys and then
   // returning the next value in the bucket permutation and inserting it in a
   // randomly chosen location to reserve it.
-  uint16_t get_ipid(Packet& pkt) override;
+  uint16_t get_ipid(Packet& pkt, uint32_t thread_id) override;
 
  protected:
   // The fixed number of buckets.

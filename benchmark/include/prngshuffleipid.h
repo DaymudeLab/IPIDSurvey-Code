@@ -21,7 +21,7 @@ class PRNGShuffleIPID : IPIDMethod {
 
   // Obtain the next IPID by returning the next value in the permutation and
   // inserting it in a randomly chosen location to reserve it.
-  uint16_t get_ipid(Packet& pkt) override;
+  uint16_t get_ipid(Packet& pkt, uint32_t thread_id) override;
 
  protected:
   // The number of IPIDs to reserve.

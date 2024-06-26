@@ -6,7 +6,7 @@
 GlobalIPID::GlobalIPID()
     : _counter(0) {}
 
-uint16_t GlobalIPID::get_ipid(Packet& pkt) {
+uint16_t GlobalIPID::get_ipid(Packet& pkt, uint32_t thread_id) {
   uint16_t temp = _counter.fetch_add(1, std::memory_order_relaxed);
   return temp + 1;
 }

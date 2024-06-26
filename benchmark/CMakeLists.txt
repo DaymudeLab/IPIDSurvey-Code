@@ -21,6 +21,7 @@ add_executable(${target}
     src/perbucketmipid.cpp
     src/prngqueueipid.cpp
     src/prngshuffleipid.cpp
+    src/prngpureipid.cpp
     src/perbucketshuffleipid.cpp
     src/main.cpp)
 

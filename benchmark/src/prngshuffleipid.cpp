@@ -21,7 +21,7 @@ PRNGShuffleIPID::PRNGShuffleIPID(uint32_t num_reserved)
   }
 }
 
-uint16_t PRNGShuffleIPID::get_ipid(Packet& pkt) {
+uint16_t PRNGShuffleIPID::get_ipid(Packet& pkt, uint32_t thread_id) {
   // Obtain exclusive access.
   _lock.lock();
 

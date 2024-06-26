@@ -21,7 +21,7 @@ class PRNGQueueIPID : IPIDMethod {
 
   // Obtain the next IPID by generating an IPID that is not currently in the
   // queue and then inserting it into the queue.
-  uint16_t get_ipid(Packet& pkt) override;
+  uint16_t get_ipid(Packet& pkt, uint32_t thread_id) override;
 
  protected:
   // The size of the searchable queue; i.e., the number of IPIDs to reserve.

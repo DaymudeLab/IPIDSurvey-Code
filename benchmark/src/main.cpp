@@ -23,6 +23,7 @@
 #include "perbucketmipid.h"
 #include "prngqueueipid.h"
 #include "prngshuffleipid.h"
+#include "prngpureipid.h"
 #include "perbucketshuffleipid.h"
 
 namespace bpo = boost::program_options;
@@ -177,7 +178,7 @@ void trial_thread(uint32_t thread_id, T& ipid_method,
   // period, don't count the number of IPIDs assigned.
   auto t_start = std::chrono::steady_clock::now();
   do {
-    ipid_method.get_ipid(packets[pkt_idx]);
+    ipid_method.get_ipid(packets[pkt_idx], thread_id);
     pkt_idx = (pkt_idx + 1) % packets.size();
   } while (std::chrono::duration_cast<std::chrono::milliseconds>(
                std::chrono::steady_clock::now() - t_start)
@@ -187,7 +188,7 @@ void trial_thread(uint32_t thread_id, T& ipid_method,
   t_start = std::chrono::steady_clock::now();
   uint64_t ipids_assigned = 0;
   do {
-    ipid_method.get_ipid(packets[pkt_idx]);
+    ipid_method.get_ipid(packets[pkt_idx], thread_id);
     pkt_idx = (pkt_idx + 1) % packets.size();
     ipids_assigned++;
   } while (std::chrono::duration_cast<std::chrono::seconds>(
@@ -250,6 +251,9 @@ void do_trials(uint32_t num_threads, std::vector<Packet>& packets) {
     } else if (ipid_method == "prngshuffle") {
       PRNGShuffleIPID prngshuffle = PRNGShuffleIPID(method_arg);
       results[t] = trial(num_threads, prngshuffle, packets);
+    } else if (ipid_method == "prngpure") {
+      PRNGPureIPID prngpure = PRNGPureIPID(num_threads);
+      results[t] = trial(num_threads, prngpure, packets);
     } else if (ipid_method == "perbucketshuffle") {
       PerBucketShuffleIPID perbuckets = PerBucketShuffleIPID(method_arg);
       results[t] = trial(num_threads, perbuckets, packets);
@@ -308,7 +312,7 @@ int main(int argc, char** argv) {
   bool valid = true;
   std::set<std::string> methods{"global", "perconn", "perdest", "perbucketl",
                                 "perbucketm", "prngqueue", "prngshuffle",
-                                "perbucketshuffle"};
+                                "prngpure", "perbucketshuffle"};
   if (!methods.contains(ipid_method)) {
     std::cerr << "ERROR: IPID selection method must be one of:\n";
     for (auto method : methods) {

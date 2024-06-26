@@ -11,7 +11,7 @@ PerDestIPID::PerDestIPID(uint32_t purge_threshold)
       _num_added_since_check(0) {
 }
 
-uint16_t PerDestIPID::get_ipid(Packet& pkt) {
+uint16_t PerDestIPID::get_ipid(Packet& pkt, uint32_t thread_id) {
   // Obtain exclusive access.
   _lock.lock();
 

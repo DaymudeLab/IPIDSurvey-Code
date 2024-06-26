@@ -29,7 +29,7 @@ class PerDestIPID : IPIDMethod {
 
   // Obtain the next IPID by initializing or incrementing the corresponding
   // destination counter and initiating a purge sequence if it is time.
-  uint16_t get_ipid(Packet& pkt) override;
+  uint16_t get_ipid(Packet& pkt, uint32_t thread_id) override;
 
  protected:
   // Threshold of destination counters over which a purge sequence is triggered.

@@ -17,7 +17,7 @@ class IPIDMethod {
  public:
   // Pure virtual function to obtain this method's next IPID as a function of
   // the packet header information.
-  virtual uint16_t get_ipid(Packet& pkt) = 0;
+  virtual uint16_t get_ipid(Packet& pkt, uint32_t thread_id) = 0;
 };
 
 #endif  // BENCHMARK_IPIDMETHOD_H_

@@ -23,7 +23,7 @@ class PerConnIPID : IPIDMethod {
   PerConnIPID();
 
   // Obtain the "next IPID" by faking an increment.
-  uint16_t get_ipid(Packet& pkt) override;
+  uint16_t get_ipid(Packet& pkt, uint32_t thread_id) override;
 };
 
 #endif  // BENCHMARK_PERCONNIPID_H_

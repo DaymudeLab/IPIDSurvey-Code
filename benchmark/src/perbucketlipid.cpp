@@ -28,7 +28,7 @@ PerBucketLIPID::PerBucketLIPID(uint32_t num_buckets)
   }
 }
 
-uint16_t PerBucketLIPID::get_ipid(Packet& pkt) {
+uint16_t PerBucketLIPID::get_ipid(Packet& pkt, uint32_t thread_id) {
   // Locate the bucket.
   size_t idx = siphash3u32(pkt._dst_addr, pkt._src_addr, pkt._protocol,
                            _sipkey1, _sipkey2) % _kNumBuckets;

@@ -44,7 +44,7 @@ PerBucketShuffleIPID::PerBucketShuffleIPID(uint32_t num_buckets)
   _sipkey2 = _dist(rng);
 }
 
-uint16_t PerBucketShuffleIPID::get_ipid(Packet& pkt) {
+uint16_t PerBucketShuffleIPID::get_ipid(Packet& pkt, uint32_t thread_id) {
   // Locate and lock the bucket.
   size_t idx = siphash3u32(pkt._dst_addr, pkt._src_addr, pkt._protocol,
                            _sipkey1, _sipkey2) % _kNumBuckets;

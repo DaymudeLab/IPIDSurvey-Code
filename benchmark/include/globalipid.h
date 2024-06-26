@@ -17,7 +17,7 @@ class GlobalIPID : IPIDMethod {
   GlobalIPID();
 
   // Obtain the next IPID by incrementing the global counter.
-  uint16_t get_ipid(Packet& pkt) override;
+  uint16_t get_ipid(Packet& pkt, uint32_t thread_id) override;
 
  protected:
   // Global counter.
