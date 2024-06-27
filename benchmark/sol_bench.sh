@@ -41,15 +41,14 @@ function run_benchmark(){
 }
 
 # EXPERIMENTS
-run_benchmark global
-run_benchmark perconn
+run_benchmark global                 # FreeBSD, default.
+run_benchmark perconn                # Linux, for connection-bound packets.
 run_benchmark perdest 32768          # Windows sets a purge threshold of 2^15.
 run_benchmark perbucketl 2048        # 2^11 buckets (Linux minimum).
 run_benchmark perbucketl 262144      # 2^18 buckets (Linux maximum).
 run_benchmark perbucketm 2048        # 2^11 buckets (Linux minimum).
 run_benchmark perbucketm 262144      # 2^18 buckets (Linux maximum).
-run_benchmark prngqueue 4096         # macOS/XNU reserves 2^12 IPIDs.
 run_benchmark prngqueue 8192         # FreeBSD reserves 2^13 IPIDs.
 run_benchmark prngshuffle 32768      # OpenBSD reserves 2^15 IPIDs.
-run_benchmark prngpure
+run_benchmark prngpure               # macOS/XNU.
 run_benchmark perbucketshuffle 12    # = in storage to 2^18 bucket counters.

@@ -43,14 +43,16 @@ if __name__ == "__main__":
     methods = [
         ('global', cm.batlowS(0), '-', 'Globally Inc. (FreeBSD)'),
         ('perconn', cm.batlowS(2), '-', 'Per-Conn. (Linux)'),
-        ('perdest262144', cm.batlowS(1), '-', r'Per-Dest., $r = 2^{{18}}$ (Windows)'),
+        ('perdest32768', cm.batlowS(1), '-', r'Per-Dest., $r = 2^{{15}}$ (Windows)'),
+        # ('perdest262144', cm.batlowS(1), '-', r'Per-Dest., $r = 2^{{18}}$ (Windows)'),
         ('perbucketl2048', cm.batlowS(3), '-', r'Per-Bucket, $r = 2^{{11}}$ (Linux)'),
         ('perbucketl262144', cm.batlowS(3), '--', r'Per-Bucket, $r = 2^{{18}}$ (Linux)'),
         ('perbucketm2048', cm.batlowS(3), ':', r'Per-Bucket, $r = 2^{{11}}$ (Linux$^*$)'),
         ('perbucketm262144', cm.batlowS(3), '*', r'Per-Bucket, $r = 2^{{18}}$ (Linux$^*$)'),
-        ('prngqueue4096', cm.batlowS(4), '-', r'PRNG-SQ, $k = 2^{{12}}$ (macOS)'),
+        # ('prngqueue4096', cm.batlowS(4), '-', r'PRNG-SQ, $k = 2^{{12}}$ (macOS)'),
+        ('prngshuffle32768', cm.batlowS(4), '-', r'PRNG-IKS, $k = 2^{{15}}$ (OpenBSD)'),
         ('prngqueue8192', cm.batlowS(4), '--', r'PRNG-SQ, $k = 2^{{13}}$ (FreeBSD)'),
-        ('prngshuffle32768', cm.batlowS(4), ':', r'PRNG-IKS, $k = 2^{{15}}$ (OpenBSD)'),
+        ('prngpure', cm.batlowS(4), ':', r'PRNG, $k = 2^{{0}}$ (macOS)'),
         # ('perbucketshuffle', cm.batlowS(4), '*', r'Per-Bucket PRNG-IKS, $r = 12$, $k = 2^{{15}}$')
         ]
 
@@ -81,7 +83,7 @@ if __name__ == "__main__":
     for method, color, linestyle, label in methods:
         plot_confband(ax[0], nums_cpus, time_means[method], time_errs[method],
                       color, linestyle, label)
-        if method != 'perconn':
+        if method not in ['perconn', 'prngpure']:
             plot_confband(ax[1], nums_cpus, thru_means[method],
                           thru_errs[method], color, linestyle)
         plot_confband(axin, nums_cpus, thru_means[method], thru_errs[method],
