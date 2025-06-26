@@ -10,7 +10,7 @@ PerBucketShuffleIPID::PerBucketShuffleIPID(uint32_t num_buckets)
   std::random_device rd;
   _rng_mts.resize(num_buckets, std::mt19937(rd()));
   _swap_dists.resize(num_buckets, std::uniform_int_distribution<uint16_t>(0,
-      _kReservedIPIDs - 1));
+      65536 - _kReservedIPIDs - 1));
 
   // Initialize the bucket locks, requiring a dumb workaround because std::mutex
   // is not a movable type.

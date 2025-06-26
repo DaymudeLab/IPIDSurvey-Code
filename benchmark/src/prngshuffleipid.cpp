@@ -7,7 +7,7 @@ PRNGShuffleIPID::PRNGShuffleIPID(uint32_t num_reserved)
     : _kReservedIPIDs(static_cast<uint16_t>(num_reserved)),
       _perm_head(0),
       _rng_mt((std::random_device())()),
-      _swap_dist(std::uniform_int_distribution<uint16_t>(0,_kReservedIPIDs-1)) {
+      _swap_dist(std::uniform_int_distribution<uint16_t>(0,65536-_kReservedIPIDs-1)) {
   // Generate the initial sequential permutation of [0, ..., 2^16 - 1].
   _perm.resize(65536, 0);
   std::iota(_perm.begin(), _perm.end(), 0);
