@@ -29,7 +29,13 @@ You can then call the corresponding plotting scripts in `collisions.py` (correct
 ### Correctness
 
 `collisions.py` contains our correctness analysis (Section 4.2).
-Run it with `python collisions.py -P <num_cores>`, where `-P` optionally specifies additional cores to speed up the calculations depending on sampling.
+Run it with
+
+```shell
+python collisions.py -P <num_cores>
+```
+
+where `-P` optionally specifies additional cores to speed up the calculations depending on sampling.
 Use `python collisions.py --help` for all options.
 If `results/collisions/` already exists, it will use the results therein instead of calculating them from scratch.
 
@@ -37,19 +43,26 @@ If `results/collisions/` already exists, it will use the results therein instead
 ### Security
 
 `security.py` contains our security analysis (Section 4.3).
-Run it with `python security.py -P <num_cores>`, where `-P` optionally specifies additional cores to speed up the calculations depending on sampling.
+Run it with
+
+```shell
+python security.py -P <num_cores>
+```
+
+where `-P` optionally specifies additional cores to speed up the calculations depending on sampling.
 Use `python security.py --help` for all options.
 If `results/security/` already exists, it will use the results therein instead of calculating them from scratch.
 
 
 ### Performance
 
-Our runtime benchmark (Section 4.4) is implemented in C++ and was run on a 128-core machine (dual-socket 2x 64-core AMD EPYC 7713 Zen3).
-If you downloaded our pre-computed results (in this case, `results/benchmark/`), then you can plot the outcome with `python benchplot.py`.
+Our runtime benchmark (Section 4.4, Appendix B) is implemented in C++ and is found in the `benchmark/` directory.
+If you downloaded our pre-computed results (in this case, `results/benchmark/`), then you can plot the outcome with `python benchplot.py` (use the `--help` option for details).
 
 If you are trying to run the benchmark from scratch, navigate to `benchmark/` and then build with `./build.sh`.
 Any build errors likely will have to do with your C++ version (we require C++20), or missing `boost` libraries (we use `boost::program_options`).
 A successful build will create a `build/` directory containing a variety of build artifacts.
 
 View the executable's options using `./build/benchmark --help`.
-Our benchmark can be replicated using `./sol_bench.sh`, though you may need to adjust the parameters based on your hardware.
+Our benchmark can be replicated using `./run_local.sh`, though you may need to adjust the parameters based on your hardware.
+For use on the ASU Sol supercomputer, use the `run_sol.sh` script instead.

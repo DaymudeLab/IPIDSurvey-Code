@@ -51,4 +51,3 @@ run_benchmark perbucketm 262144      # 2^18 buckets (Linux maximum).
 run_benchmark prngqueue 8192         # FreeBSD reserves 2^13 IPIDs.
 run_benchmark prngshuffle 32768      # OpenBSD reserves 2^15 IPIDs.
 run_benchmark prngpure               # macOS/XNU.
-run_benchmark perbucketshuffle 12    # = in storage to 2^18 bucket counters.
