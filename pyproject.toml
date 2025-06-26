@@ -1,0 +1,13 @@
+[project]
+name = "ipidsurvey"
+version = "0.1.0"
+description = "Sampling and benchmark code for comparing IPID selection methods' correctness, security, and performance"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "cmcrameri==1.7",
+    "matplotlib~=3.8.0",
+    "numpy~=1.25.0",
+    "scipy~=1.11.0",
+    "tqdm~=4.66.0",
+]

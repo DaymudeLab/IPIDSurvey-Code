@@ -5,10 +5,17 @@ This repository contains the supporting simulation, benchmarking, and plotting c
 
 ## Getting Started
 
-Before running any scripts, please build and activate the necessary `conda` environment by running:
+We use [`uv`](https://docs.astral.sh/uv/) to manage Python environments.
+[Install it](https://docs.astral.sh/uv/getting-started/installation/) and then run the following to get all dependencies:
+
+```shell
+uv sync
 ```
-conda create --file requirements.yml
-conda activate IPIDSurvey
+
+Then activate the corresponding virtual environment with:
+
+```shell
+source .venv/bin/activate
 ```
 
 Many of our results involve computationally expensive sampling or benchmarking experiments.
